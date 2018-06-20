@@ -1,0 +1,49 @@
+{
+  "name": "book-shelf",
+  "version": "1.0.0",
+  "description": "API to add and view list of books ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon --exec babel-node ./bin/www"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mcdavid95/book-shelf.git"
+  },
+  "keywords": [
+    "books",
+    "postgresql",
+    "sequelize"
+  ],
+  "author": "Mcdavid",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Mcdavid95/book-shelf/issues"
+  },
+  "homepage": "https://github.com/Mcdavid95/book-shelf#readme",
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0",
+    "bcrypt": "^2.0.1",
+    "body-parser": "^1.18.3",
+    "bunyan": "^1.8.12",
+    "chai": "^4.1.2",
+    "dotenv": "^6.0.0",
+    "express": "^4.16.3",
+    "jsonwebtoken": "^8.3.0",
+    "mocha": "^5.2.0",
+    "morgan": "^1.9.0",
+    "nodemon": "^1.17.5",
+    "pg": "^7.4.3",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.37.10",
+    "sequelize-cli": "^4.0.0",
+    "supertest": "^3.1.0"
+  },
+  "devDependencies": {
+    "eslint-config-airbnb": "^16.1.0"
+  }
+}

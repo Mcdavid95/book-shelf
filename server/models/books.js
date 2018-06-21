@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
     ratings: DataTypes.ARRAY(DataTypes.INTEGER),
+    averageRatings: DataTypes.FLOAT,
     author: {
       type: DataTypes.STRING,
       unique: true,

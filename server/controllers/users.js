@@ -92,7 +92,7 @@ export default {
         }
         if (user) {
           return res.status(202).send({
-            token: createToken(user.id),
+            token: createToken(user.id, user.username),
             message: 'Welcome back'
           });
         }

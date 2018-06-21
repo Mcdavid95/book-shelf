@@ -1,6 +1,7 @@
-'use strict';
+
+
 module.exports = (sequelize, DataTypes) => {
-  var Books = sequelize.define('Books', {
+  const Books = sequelize.define('Books', {
     title: {
       type: DataTypes.STRING,
       unique: true,

@@ -1,0 +1,421 @@
+swagger: '2.0'
+info:
+  version: '1.0'
+  title: "Book-Shelf"
+  description: Book-Shelf is a simple API to add and view list of books.
+  license:
+    name: MIT
+    url: https://github.com/apiaryio/polls-api/blob/master/LICENSE
+host: polls.apiblueprint.org
+basePath: /api/v1
+schemes:
+- http
+consumes:
+- application/json
+produces:
+- application/json
+paths:
+  /user/register:
+    x-summary: User Signup
+    post:
+      summary: Create User
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/SignupRequest'
+      responses:
+        201:
+          description: Successful Response
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/User'
+          examples:
+            application/json:
+              - token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJtY2RhdmlkIiwiaWF0IjoxNTI5NTg1MDM3fQ.W7r6LFBNQKM9eYpjh5AAeX6AqYKQzWyzM1YekjIsFPY
+                message: User Successfully created
+        409:
+          description: Email already in use
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Conflict'
+          examples:
+            application/json:
+              success: false
+              message: Email already in use
+    
+  /user/login:
+    x-summary: User Login
+    post:
+      summary: Login User
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/LoginRequest'
+      responses:
+        202:
+          description: Successful Response
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/User'
+          examples:
+            application/json:
+              - token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJtY2RhdmlkIiwiaWF0IjoxNTI5NTg1MDM3fQ.W7r6LFBNQKM9eYpjh5AAeX6AqYKQzWyzM1YekjIsFPY
+                message: User Successfully created
+        500:
+          description: Server Error
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/ServerError'
+          examples:
+            $ref: '#/definitions/ServerError/example'
+        404:
+          description: Email does not exist
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/NotFound'
+          examples:
+            application/json:
+              success: false
+              message: Email does not exist
+  /book:
+    x-summary: Add Book
+    post:
+      summary: Add a new book
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AddBook'
+      responses:
+        201:
+          description: Book Created
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/BookSuccess'
+          examples:
+            application/json:
+              - success: true
+                message: Boook with title:- Art of War succesfully created
+        409:
+          description: Title already in use
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Conflict'
+          examples:
+            application/json:
+              success: false
+              message: Title already in use
+  /books:
+    x-summary: Get books
+    x-description: Get the list of all books in the database.
+    get:
+      summary: List all books
+      responses:
+        202:
+          description: Get all books in the database
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/ListBooks'
+          examples:
+            application/json:
+              - success: true
+                books: [
+                    {
+                      id: 2,
+                      title: Art of war,
+                      averageRatings: 5
+                    },
+                    {
+                      id: 3,
+                      title: Gradle,
+                      averageRatings: 4
+                    }
+                  ]
+        200:
+          description: No books found
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/BookSuccess'
+          examples:
+            application/json:
+              success: true
+              message: No book found
+  /book/{id}:
+    x-summary: Book Collection
+    x-description: Handle delete, update and reading of a selected book
+    get:
+      summary: Get a book
+      parameters:
+        - name: id
+          in: path
+          type: number
+          required: true
+          description: id of selected book
+      responses:
+        200:
+          description: Book Found
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/BookFound'
+          examples:
+            application/json:
+              - success: true
+                message: Book found
+                book: {
+                  id: 2,
+                  title: Art of war,
+                  averageRatings: 3
+                }
+        404:
+          description: Book does not exist
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/NotFound'
+          examples:
+            application/json:
+              success: false
+              message: Book does not exist
+    put:
+      summary: Update a book
+      parameters:
+        - name: id
+          in: path
+          description: id of book to be deleted
+          type: number
+          required: true
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AddBook'
+      responses:
+        200:
+          description: Book Edited
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/AddBook'
+          examples:
+            application/json:
+              - success: true
+                message: Book successesfully updated
+                book: {
+                  id: 2,
+                  title: Art of war,
+                  averageRatings: 4.5
+                }
+        404:
+          description: Book does not exist
+          x-description: when book id is not found
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/NotFound'
+          examples:
+            application/json:
+              success: false
+              message: Book does not exist
+    delete:
+      summary: Delete a book
+      parameters:
+        - name: id
+          in: path
+          type: number
+          description: id of book to be deleted
+          required: true
+      responses:
+        200:
+          description: Book Deleted
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/AddBook'
+          examples:
+            application/json:
+              - success: true
+                message: Book successesfully deleted
+        404:
+          description: Book does not exist
+          x-description: when book id is not found
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/NotFound'
+          examples:
+            application/json:
+              success: false
+              message: Book does not exist
+  /book/{id}/rate:
+    x-summary: Ratings
+    x-description: Handle rating of book
+    post:
+      summary: Rate a book
+      parameters:
+        - name: id
+          in: path
+          type: number
+          required: true
+          description: id of selected book
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/RateBook'
+      responses:
+        200:
+          description: Book Found
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/BookFound'
+          examples:
+            application/json:
+              - success: true
+                message: Boook found
+                book: {
+                  id: 2,
+                  title: Art of war,
+                  
+                }
+        404:
+          description: Book does not exist
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/NotFound'
+          examples:
+            application/json:
+              success: false
+              message: Book does not exist
+definitions:
+  User:
+    title: User
+    type: object
+    properties:
+      token:
+        type: string
+      message:
+        type: string
+    required:
+      - token
+      - message
+  LoginRequest:
+    title: Login Request
+    type: object
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+      - email
+      - password
+    example:
+      email: mcd@email.com
+      password: ragnar#04
+  SignupRequest:
+    title: Signup Request
+    type: object
+    properties:
+      username:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+    required:
+      - username
+      - email
+      - password
+    example:
+      username: mcdavid
+      email: mcd@email.com
+      password: ragnar#04
+  ServerError:
+    title: Server Error
+    type: object
+    properties:
+      success:
+        type: boolean
+      message:
+        type: string
+    example:
+      application/json:
+        success: false
+        message: Internal Server Error
+  NotFound:
+    title: Not Found
+    type: object
+    properties:
+      success:
+        type: boolean
+      message:
+        type: string
+  Conflict:
+    title: Conflict
+    type: object
+    properties:
+      success:
+        type: boolean
+      message:
+        type: string
+  AddBook:
+    title: create book
+    type: object
+    properties:
+      title:
+        type: string
+    required:
+      - title
+    example:
+      title: Art of War
+  BookSuccess:
+    title: Book Created
+    type: object
+    properties:
+      success:
+        type: boolean
+      message:
+        type: string
+  BookFound:
+    title: Book Found
+    type: object
+    properties:
+      success:
+        type: boolean
+      message:
+        type: string
+      book:
+        type: object
+  ListBooks:
+    title: List Books
+    type: object
+    properties:
+      success:
+        type: boolean
+      books:
+        type: array
+  RateBook:
+    title: Rate Book
+    type: object
+    properties:
+      rating:
+        type: number
+    example:
+      rating: 5
